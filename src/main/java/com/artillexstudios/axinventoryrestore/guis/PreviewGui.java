@@ -102,7 +102,18 @@ public class PreviewGui {
 
                 final Player player = Bukkit.getPlayer(restoreUser);
                 if (player == null) {
-                    MESSAGEUTILS.sendLang(viewer, "errors.player-offline");
+                    if (isEnder) {
+                        MESSAGEUTILS.sendLang(viewer, "errors.player-offline");
+                        return;
+                    }
+
+                    if (AxInventoryRestore.getBackups().containsKey(restoreUser)) {
+                        MESSAGEUTILS.sendLang(viewer, "player-backup-overrided");
+                    } else {
+                        MESSAGEUTILS.sendLang(viewer, "player-backup-queued");
+                    }
+
+                    AxInventoryRestore.getBackups().put(restoreUser, items);
                     return;
                 }
 

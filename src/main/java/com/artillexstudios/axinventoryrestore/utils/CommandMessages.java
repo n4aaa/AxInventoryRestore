@@ -64,7 +64,7 @@ public class CommandMessages implements LocaleReader {
         return StringUtils.formatToString(CONFIG.getString("prefix", "") + res);
     }
 
-    private final Locale locale = new Locale("en", "US");
+    private final Locale locale = new Locale("pl", "PL");
 
     @Override
     public Locale getLocale() {

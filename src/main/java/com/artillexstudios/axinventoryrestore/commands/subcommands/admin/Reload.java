@@ -1,4 +1,4 @@
-package com.artillexstudios.axinventoryrestore.commands.subcommands;
+package com.artillexstudios.axinventoryrestore.commands.subcommands.admin;
 
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axinventoryrestore.AxInventoryRestore;

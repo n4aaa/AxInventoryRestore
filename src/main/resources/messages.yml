@@ -1,27 +1,31 @@
-reloaded: "&#33FF33Successfully reloaded plugin!"
+reloaded: "&#33FF33Pomyślnie odświeżono plugin!"
 reload-fail: "&#FF3333Failed to reload the plugin! Something is wrong in the &f%file%&#FF3333 file, look in the console or use a yaml validator to fix the errors!"
 
-cleaned-up: "&#33FF33Successfully cleaned up database!"
+cleaned-up: "&#33FF33Pomyślnie wyczyszczono bazę danych!"
 
-manual-backup: "&#33FF33Successfully made a manual backup for &f%player%&#33FF33!"
-manual-backup-all: "&#33FF33Successfully made a manual backup for all players!"
+manual-backup: "&#33FF33Pomyślnie wykonano backupa dla &f%player%&#33FF33!"
+manual-backup-all: "&#33FF33Pomyślnie wykonano backupa dla każdego gracza!"
 manual-created-by: "by: %player%"
+
+player-backup-queued: "&#33FF33Gracz jest offline, może odebrać backupa po wejściu!"
+player-backup-overrided: "&#33FF33Pomyślnie nadpisałeś backupa dla gracza!"
+player-backup-claimed: "&#33FF33Pomyślnie odebrałeś backupa!"
 
 help:
   - " "
-  - "<gradient:#00AAFF:#00CCFF><b>AxInventoryRestore</b></gradient> <#00DDFF>Help"
-  - " <#00DDFF>➤ <white>/axir view <player> <#DDDDDD>| <#AAFFFF>Open restore GUI"
-  - " <#00DDFF>➤ <white>/axir save <player> <#DDDDDD>| <#AAFFFF>Create manual backup"
-  - " <#00DDFF>➤ <white>/axir saveall <#DDDDDD>| <#AAFFFF>Create manual backup for all players"
-  - " <#00DDFF>➤ <white>/axir reload <#DDDDDD>| <#AAFFFF>Reload plugin"
-  - " <#00DDFF>➤ <white>/axir cleanup <#DDDDDD>| <#AAFFFF>Delete old backups (look at config.yml)"
+  - " <dark_gray>» <white>/backup nadaj <player> <#DDDDDD>| <#AAFFFF>Otwiera gui nadania backupa"
+  - " <dark_gray>» <white>/backup zapisz <player> <#DDDDDD>| <#AAFFFF>Tworzy backupa"
+  - " <dark_gray>» <white>/backup zapiszwszystko <#DDDDDD>| <#AAFFFF>Tworzy backupa dla każdego"
+  - " <dark_gray>» <white>/backup reload <#DDDDDD>| <#AAFFFF>Przeładowywuje plugin"
+  - " <dark_gray>» <white>/backup wyczysc <#DDDDDD>| <#AAFFFF>Usuwa stare backupy"
   - " "
 
 errors:
-  no-permission: "&#FF3333You don't have permission to run this command!"
-  player-offline: "&#FF3333The player must be online to restore their inventory!"
-  unknown-player: "&#FF3333This player has no backups saved! &#DDDDDD(error: %number%)"
-  not-player: "&#FF3333You must be a player to execute this command!"
+  no-permission: "&#FF3333Nie masz permissji do tej komendy!"
+  player-offline: "&#FF3333Ten gracz musi być online aby nadać mu backupa!"
+  unknown-player: "&#FF3333Ten gracz nie ma backupów! &#DDDDDD(błąd: %number%)"
+  not-player: "&#FF3333Musisz być graczem aby wykonać tę komende!"
+  backup-unavailable: "&#FF3333Nie posiadasz backupa do odbioru!"
 
 restored-shulker:
   # this must be some kind of shulker box!
@@ -89,16 +93,16 @@ guis:
 gui-items:
   close:
     material: BARRIER
-    name: "&#FF3333&lClose"
+    name: "&#FF3333&lZamknij"
   back:
     material: BARRIER
-    name: "&#FF3333&lBack"
+    name: "&#FF3333&lPowrót"
   previous-page:
     material: ARROW
-    name: "&#FF6600&lPrevious Page"
+    name: "&#FF6600&lPoprzednia strona"
   next-page:
     material: ARROW
-    name: "&#FFCC00&lNext Page"
+    name: "&#FFCC00&lNastępna strona"
 
 categories:
   ALL:

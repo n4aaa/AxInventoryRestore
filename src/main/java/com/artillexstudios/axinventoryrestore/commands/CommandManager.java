@@ -9,6 +9,7 @@ import revxrsal.commands.bukkit.BukkitCommandHandler;
 import java.util.Locale;
 
 public class CommandManager {
+
     private static BukkitCommandHandler handler = null;
 
     public static void load() {
@@ -17,7 +18,7 @@ public class CommandManager {
         handler.getAutoCompleter().registerSuggestion("offlinePlayers", (args, sender, command) -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toList());
 
         handler.getTranslator().add(new CommandMessages());
-        handler.setLocale(Locale.of("en", "US"));
+        handler.setLocale(Locale.of("pl", "PL"));
 
         reload();
     }
@@ -25,8 +26,10 @@ public class CommandManager {
     public static void reload() {
         handler.unregisterAllCommands();
 
-        handler.register(new Commands());
+        handler.register(new AdminCommand());
+        handler.register(new PlayerCommand());
 
         handler.registerBrigadier();
     }
+
 }

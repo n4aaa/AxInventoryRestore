@@ -1,4 +1,4 @@
-package com.artillexstudios.axinventoryrestore.commands.subcommands;
+package com.artillexstudios.axinventoryrestore.commands.subcommands.admin;
 
 import com.artillexstudios.axapi.scheduler.Scheduler;
 import com.artillexstudios.axinventoryrestore.AxInventoryRestore;

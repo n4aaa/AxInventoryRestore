@@ -8,7 +8,6 @@ import com.artillexstudios.axapi.libs.boostedyaml.settings.dumper.DumperSettings
 import com.artillexstudios.axapi.libs.boostedyaml.settings.general.GeneralSettings;
 import com.artillexstudios.axapi.libs.boostedyaml.settings.loader.LoaderSettings;
 import com.artillexstudios.axapi.libs.boostedyaml.settings.updater.UpdaterSettings;
-import com.artillexstudios.axapi.metrics.AxMetrics;
 import com.artillexstudios.axapi.utils.MessageUtils;
 import com.artillexstudios.axapi.utils.featureflags.FeatureFlags;
 import com.artillexstudios.axinventoryrestore.commands.CommandManager;
@@ -24,15 +23,18 @@ import com.artillexstudios.axinventoryrestore.listeners.ListenerManager;
 import com.artillexstudios.axinventoryrestore.queue.PriorityThreadedQueue;
 import com.artillexstudios.axinventoryrestore.schedulers.AutoBackupScheduler;
 import com.artillexstudios.axinventoryrestore.utils.UpdateNotifier;
-import org.bstats.bukkit.Metrics;
-import org.bstats.charts.SimplePie;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import revxrsal.zapper.DependencyManager;
 import revxrsal.zapper.relocation.Relocation;
 
 import java.io.File;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class AxInventoryRestore extends AxPlugin {
+
     public static Config CONFIG;
     public static Config MESSAGES;
     public static Config DISCORD;
@@ -41,7 +43,7 @@ public final class AxInventoryRestore extends AxPlugin {
     private static PriorityThreadedQueue<Runnable> threadedQueue;
     private static Database database;
     private static DiscordAddon discordAddon = null;
-    private static AxMetrics metrics;
+    private static Map<UUID, ItemStack[]> backups = new ConcurrentHashMap<>();
     private static boolean debug;
 
     @Nullable
@@ -59,6 +61,10 @@ public final class AxInventoryRestore extends AxPlugin {
 
     public static PriorityThreadedQueue<Runnable> getThreadedQueue() {
         return threadedQueue;
+    }
+
+    public static Map<UUID, ItemStack[]> getBackups() {
+        return backups;
     }
 
     public static boolean isDebugMode() {
@@ -88,8 +94,6 @@ public final class AxInventoryRestore extends AxPlugin {
 
     @Override
     public void enable() {
-        Metrics bstats = new Metrics(this, 19446);
-
         CONFIG = new Config(new File(getDataFolder(), "config.yml"), getResource("config.yml"), GeneralSettings.builder().setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setKeepAll(true).setVersioning(new BasicVersioning("version")).build());
         MESSAGES = new Config(new File(getDataFolder(), "messages.yml"), getResource("messages.yml"), GeneralSettings.builder().setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setKeepAll(true).setVersioning(new BasicVersioning("version")).build());
         DISCORD = new Config(new File(getDataFolder(), "discord.yml"), getResource("discord.yml"), GeneralSettings.builder().setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setKeepAll(true).setVersioning(new BasicVersioning("version")).build());
@@ -106,8 +110,6 @@ public final class AxInventoryRestore extends AxPlugin {
             default -> database = new H2();
         }
 
-        bstats.addCustomChart(new SimplePie("database_type", () -> database.getType()));
-
         database.setup();
         AxInventoryRestore.getThreadedQueue().submit(() -> database.cleanup());
 
@@ -118,18 +120,14 @@ public final class AxInventoryRestore extends AxPlugin {
 
         boolean loadDiscordAddon = CONFIG.getBoolean("enable-discord-addon", false);
         if (loadDiscordAddon && !DISCORD.getString("token").isBlank()) discordAddon = new DiscordAddon();
-        bstats.addCustomChart(new SimplePie("uses_discord_addon", () -> "" + loadDiscordAddon));
-
-        metrics = new AxMetrics(this, 19);
-        metrics.start();
 
         if (CONFIG.getBoolean("update-notifier.enabled", true)) new UpdateNotifier(this, 4610);
     }
 
     @Override
     public void disable() {
-        if (metrics != null) metrics.cancel();
         AutoBackupScheduler.stop();
+
         threadedQueue.stop();
         database.disable();
     }
